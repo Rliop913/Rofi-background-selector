@@ -46,5 +46,5 @@ for fName in "${bgnames[@]}"; do
     strrr+="$(echo -n "${fName}\0icon\x1f${cachedresult[$fName]}\n")"
 done
 
-selected=$(echo -en "${strrr}" | rofi -dmenu -no-layers -p "search" -config ~/rropdb/arch_custom_style/rofiConfig.rasi )
+selected=$(echo -en "${strrr}" | rofi -dmenu -no-layers -p "search" -config $1 )
 swww img "${bgresult[$selected]}" --transition-type wipe --transition-fps 60

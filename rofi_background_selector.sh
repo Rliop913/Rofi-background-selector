@@ -11,7 +11,15 @@ declare -A cachedresult
 bgnames=()
 
 function cacheImg {
-    ffmpeg -i $1 -loglevel quiet -vf "scale=-1:600, crop=600:600:(iw-600)/2:0" $2
+    resolution=$(ffprobe -v error -select_streams v:0 -show_entries stream=width,height -of csv=p=0 $1)
+    width_=$(echo "${resolution}" | awk -F',' '{print $1}')
+    height_=$(echo "${resolution}" | awk -F',' '{print $2}')
+    if [ "${width_}" -lt "${height_}" ]
+    then
+        ffmpeg -i $1 -loglevel quiet -vf  "scale=600:-1, crop=600:600:0:(iw-600)/2" $2
+    else
+        ffmpeg -i $1 -loglevel quiet -vf  "scale=-1:600, crop=600:600:(iw-600)/2:0" $2
+    fi
     echo $2
 }
 
